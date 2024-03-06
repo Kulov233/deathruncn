@@ -4,4 +4,5 @@
 	"title"		"Deathrun 死亡跑酷"
       "category"	      "fun"
 	"maps"		"^deathrun"
+	"category"	"pvp"
 }

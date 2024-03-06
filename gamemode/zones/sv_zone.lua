@@ -331,18 +331,17 @@ hook.Add("DeathrunPlayerEnteredZone", "DeathrunPlayerFinishMap", function(ply, n
 			placetext = placestring.."th"
 		end
 
-		
-		for k,v in ipairs( team.GetPlayers( TEAM_DEATH ) ) do
-			v:SetRunSpeed( 300 )
-		end
+		local finishtime = CurTime() - ZONE.StartTime
 
-		DR:ChatBroadcast(ply:Nick().." 到达了终点， 用时 "..string.ToMinutesSecondsMilliseconds(CurTime() - ZONE.StartTime).." ，位次为 "..placetext.." 。")
+		DR:ChatBroadcast(ply:Nick().." 到达了终点， 用时 "..string.ToMinutesSecondsMilliseconds(finishtime).." ，位次为 "..placetext.." 。")
 		ply.HasFinishedMap = true
 
-		for k,v in ipairs(team.GetPlayers( TEAM_DEATH )) do
-			v:SetRunSpeed( v:GetWalkSpeed() ) -- deaths lose sprint when the runner finishes
+		if place == 1 then
+			for k,v in ipairs(team.GetPlayers( TEAM_DEATH )) do
+				v:SetRunSpeed( v:GetWalkSpeed() ) -- deaths lose sprint when the runner finishes
+			end
 		end
 
-		hook.Call("DeathrunPlayerFinishMap", nil, ply, name, z, place, CurTime() - ZONE.StartTime)
+		hook.Call("DeathrunPlayerFinishMap", nil, ply, name, z, place, finishtime)
 	end
 end)

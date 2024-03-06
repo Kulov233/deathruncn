@@ -11,9 +11,9 @@
 * 将**deathruncn-master**文件夹复制到**garrysmod/gamemodes**目录。
 * 将**deathruncn-master**文件夹重命名为**deathruncn**。
 * 在您的**server.cfg**文件中，加入这行代码（若已有以gamemode开头的行则将其修改为）：
-```gamemode deathrun```
+```gamemode deathruncn```
 * 如果您更喜欢在服务器的启动参数中指定游戏模式，请将以下的参数添加到服务器的启动参数：
-```+gamemode deathrun``` 
+```+gamemode deathruncn``` 
   
 这样就完成了安装。   
 一些额外的功能与数据：  

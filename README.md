@@ -17,12 +17,12 @@
 * 这样就完成了安装。  
   
 一些额外的功能与数据：  
-* 如果您想启用幽灵（Ghost）功能，请将**useful_stuff/ghost**文件夹复制到**garrysmod/addons**目录。注意，本插件来自[这个仓库](https://github.com/ceifa/gmod-deathrun-ghost)。
+* 如果您想启用幽灵（Ghost）功能，请将**useful_stuff/ghost**文件夹复制到**garrysmod/addons**目录。注意，本插件来自这个仓库：[gmod-deathrun-ghost](https://github.com/ceifa/gmod-deathrun-ghost)。
 * **useful_stuff/zones**文件夹中记录了很多死亡跑酷地图的区域数据（主要是地图的起点与终点区域）。如果您想快速导入这些数据，请将本文件夹复制到**garrysmod/data/deathrun**文件夹中。
 
 ## 帮助  
-请参阅在本仓库所属的主仓库（deathrun-master）中的帮助文件。
+请参阅在本仓库所属的主仓库（[deathrun](https://github.com/Arizard/deathrun)）中的帮助文件。
 
 ## 支持
-受本人精力所限，本仓库仅提供汉化版的死亡跑酷插件，不提供任何支持。您可以在本仓库所属的主仓库（deathrun-master）中提出Issue，或是加入死亡跑酷原开发者所创建的Steam组中创建讨论贴子：[原开发者Steam组页面](http://steamcommunity.com/groups/vhs7)。
+受本人精力所限，本仓库仅提供汉化版的死亡跑酷插件，不提供任何支持。您可以在本仓库所属的主仓库（[deathrun](https://github.com/Arizard/deathrun)）中提出Issue，或是加入死亡跑酷原开发者所创建的Steam组中创建讨论贴子：[原开发者Steam组页面](http://steamcommunity.com/groups/vhs7)。
 

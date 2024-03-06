@@ -28,7 +28,7 @@ if SERVER then
 		if hasPointshop then
 			ply:PS_GivePoints( amt )
 			if PointshopRewardMessage:GetBool() then
-				ply:PS_Notify("You were given "..tostring( amt ).." points for "..(reason or "playing").."!")
+				ply:PS_Notify("您被给予了 "..tostring( amt ).." 奖励点数，因为您 "..(reason or "正在游玩本服务器").."！")
 			end
 		end
 		if hasRedactedHub then
@@ -37,29 +37,29 @@ if SERVER then
 				ply:AddMoney( amt )
 				RS:SubStoreMoney( amt )
 				if PointshopRewardMessage:GetBool() then
-					ply:DeathrunChatPrint("You were given "..tostring( amt ).." points for "..(reason or "playing").."!")
+					ply:DeathrunChatPrint("您被给予了 "..tostring( amt ).." 奖励点数，因为您 "..(reason or "正在游玩本服务器").."！")
 				end
 			else
 				if PointshopRewardMessage:GetBool() then
-					ply:DeathrunChatPrint("Unfortunately the store does not have enough points to reward you.")
+					ply:DeathrunChatPrint("很抱歉，商店目前的点数不足以奖励您。")
 				end
 			end			
 		end
 		if hasPointshop2 then
 			--if PointshopRewardMessage:GetBool() then
-			ply:PS2_AddStandardPoints( amt, "You were given "..tostring( amt ).." points for "..(reason or "playing").."!", true)
+			ply:PS2_AddStandardPoints( amt, "您获得了"..tostring( amt ).."点数，因为您"..(reason or "正在游玩本服务器").."！", true)
 		end
 	end
 
 
 	hook.Add("DeathrunPlayerFinishMap", "PointshopRewards", function( ply, zname, z, place )
-		DR:RewardPlayer( ply, PointshopFinishReward:GetInt(), "finishing the map")
+		DR:RewardPlayer( ply, PointshopFinishReward:GetInt(), "通关了地图")
 	end)
 
 	hook.Add("PlayerDeath", "PointshopRewards", function( ply, inflictor, attacker )
 		if attacker:IsPlayer() then
 			if ply:Team() ~= attacker:Team() then
-				DR:RewardPlayer( attacker, PointshopKillReward:GetInt(), "killing "..ply:Nick())
+				DR:RewardPlayer( attacker, PointshopKillReward:GetInt(), "击杀了"..ply:Nick())
 			end
 		end
 	end)
@@ -67,7 +67,7 @@ if SERVER then
 	hook.Add("DeathrunRoundWin", "PointshopRewards", function( winner )
 		for k,v in ipairs( player.GetAllPlaying() ) do
 			if v:Team() == winner then
-				DR:RewardPlayer( v, PointshopWinReward:GetInt(), "winning the round")
+				DR:RewardPlayer( v, PointshopWinReward:GetInt(), "赢得了回合")
 			end
 		end
 	end)

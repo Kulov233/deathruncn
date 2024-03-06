@@ -131,23 +131,23 @@ function DR:CreateScoreboard()
 	local small = GetConVar("deathrun_scoreboard_small"):GetBool()
 
 	dlist:Add( header )
-	dlist:Add( DR:NewScoreboardSpacer( {"[Hint] Right Click to scroll and interact with scoreboard."}, dlist:GetWide(), small and 24 or 32, DR.Colors.Turq ) )
+	dlist:Add( DR:NewScoreboardSpacer( {"[Hint] 使用右键使光标现形，并可以通过单击玩家名称以执行如静音等更多操作。"}, dlist:GetWide(), small and 24 or 32, DR.Colors.Turq ) )
 
-	dlist:Add( DR:NewScoreboardSpacer( {tostring(#team.GetPlayers(TEAM_DEATH)).." players on Death Team"}, dlist:GetWide(), small and 24 or 32, team.GetColor( TEAM_DEATH ) ) )
+	dlist:Add( DR:NewScoreboardSpacer( {"死神 队伍有 "..tostring(#team.GetPlayers(TEAM_DEATH)).." 名玩家。"}, dlist:GetWide(), small and 24 or 32, team.GetColor( TEAM_DEATH ) ) )
 	for k,ply in ipairs(team.GetPlayers( TEAM_DEATH )) do
 		dlist:Add( DR:NewScoreboardPlayer( ply, dlist:GetWide(), small and 22 or 28 ) )
 	end
-	dlist:Add( DR:NewScoreboardSpacer( {tostring(#team.GetPlayers(TEAM_RUNNER)).." players on Runner Team"}, dlist:GetWide(), small and 24 or 32, team.GetColor( TEAM_RUNNER ) ) )
+	dlist:Add( DR:NewScoreboardSpacer( {"奔跑者 队伍有 "..tostring(#team.GetPlayers(TEAM_RUNNER)).." 名玩家。"}, dlist:GetWide(), small and 24 or 32, team.GetColor( TEAM_RUNNER ) ) )
 	for k,ply in ipairs(team.GetPlayers( TEAM_RUNNER )) do
 		dlist:Add( DR:NewScoreboardPlayer( ply, dlist:GetWide(), small and 22 or 28 ) )
 	end
 	if GhostMode then -- GhostMode support
-		dlist:Add( DR:NewScoreboardSpacer( {tostring(#team.GetPlayers(TEAM_GHOST)).." players in Ghost Mode"}, dlist:GetWide(), small and 24 or 32, team.GetColor( TEAM_GHOST ) ) )
+		dlist:Add( DR:NewScoreboardSpacer(  {"幽灵 队伍有 "..tostring(#team.GetPlayers(TEAM_GHOST)).." 名玩家。"}, dlist:GetWide(), small and 24 or 32, team.GetColor( TEAM_GHOST ) ) )
 		for k,ply in ipairs(team.GetPlayers( TEAM_GHOST )) do
 			dlist:Add( DR:NewScoreboardPlayer( ply, dlist:GetWide(), small and 22 or 28 ) )
 		end
 	end
-	dlist:Add( DR:NewScoreboardSpacer( {tostring(#team.GetPlayers(TEAM_SPECTATOR)).." players Spectating"}, dlist:GetWide(), small and 24 or 32,  HexColor("#303030") ) )
+	dlist:Add( DR:NewScoreboardSpacer( {"观察者 队伍有 "..tostring(#team.GetPlayers(TEAM_SPECTATOR)).." 名玩家。"}, dlist:GetWide(), small and 24 or 32,  HexColor("#303030") ) )
 	for k,ply in ipairs(team.GetPlayers( TEAM_SPECTATOR )) do
 		dlist:Add( DR:NewScoreboardPlayer( ply, dlist:GetWide(), small and 22 or 28 ) )
 	end
@@ -156,7 +156,7 @@ function DR:CreateScoreboard()
 
 	local sizetog = vgui.Create("AuToggle_Deathrun", options)
 	sizetog:SetConVar( "deathrun_scoreboard_small" )
-	sizetog:SetText("Small Text")
+	sizetog:SetText("小字号模式")
 	sizetog:SizeToContents()
 
 	dlist:Add( options )
@@ -333,18 +333,18 @@ function DR:NewScoreboardPlayer( ply, w, h )
 
 		if not menu.ply:IsBot() then
 		
-			local copyID = menu:AddOption( "Copy SteamID to clipboard" )
+			local copyID = menu:AddOption( "复制SteamID" )
 			copyID.ply = menu.ply
 			copyID:SetIcon("icon16/page_copy.png")
 			function copyID:DoClick()
 				if not IsValid(self.ply) then return end
 				SetClipboardText( self.ply:SteamID() )
-				DR:ChatMessage( self.ply:Nick().."'s SteamID was copied to the clipboard!" )
+				DR:ChatMessage( self.ply:Nick().."的SteamID已经被复制到您的剪切板中。" )
 			end
 
 			--http://steamcommunity.com/profiles/
 
-			local openprofile = menu:AddOption( "Open Steam profile" )
+			local openprofile = menu:AddOption( "打开Steam个人资料页" )
 			openprofile.ply = menu.ply
 			openprofile:SetIcon("icon16/page_world.png")
 			function openprofile:DoClick()
@@ -352,19 +352,19 @@ function DR:NewScoreboardPlayer( ply, w, h )
 				gui.OpenURL( "http://steamcommunity.com/profiles/"..self.ply:SteamID64() )
 			end
 
-			local mute = menu:AddOption( "Toggle voice" )
+			local mute = menu:AddOption( "开启/关闭声音" )
 			mute.ply = menu.ply
 			mute:SetIcon("icon16/sound.png")
 			function mute:DoClick()
 				if not IsValid(self.ply) then return end
 				RunConsoleCommand("deathrun_toggle_mute",self.ply:SteamID())
-				DR:ChatMessage( "Toggled mute on "..self.ply:Nick().."!" )
+				DR:ChatMessage( "已对玩家 "..self.ply:Nick().."开启/关闭静音！" )
 			end
 
 		end
 
 		if DR:CanAccessCommand( LocalPlayer(), "deathrun_force_spectate" ) then
-			local specop = menu:AddOption( "Force to Spectator" ) -- spectator options... SPEC OPS!
+			local specop = menu:AddOption( "强制切换到观察者" ) -- spectator options... SPEC OPS!
 			specop.ply = menu.ply
 			specop:SetIcon("icon16/status_offline.png")
 			function specop:DoClick()
@@ -390,7 +390,7 @@ function DR:NewScoreboardPlayer( ply, w, h )
 		if ulx then
 
 			if ULib.ucl.query( LocalPlayer(), "ulx gag", true) then
-				local option = menu:AddOption( "Gag player voice" ) -- gag
+				local option = menu:AddOption( "强制gag静音" ) -- gag
 				option.ply = menu.ply
 				option:SetIcon("icon16/sound.png")
 				function option:DoClick()
@@ -398,7 +398,7 @@ function DR:NewScoreboardPlayer( ply, w, h )
 					LocalPlayer():ConCommand( "ulx gag "..[["]]..self.ply:Nick()..[["]] )
 				end
 			
-				local option = menu:AddOption( "Ungag player voice" ) -- ugag
+				local option = menu:AddOption( "解除gag静音" ) -- ugag
 				option.ply = menu.ply
 				option:SetIcon("icon16/sound.png")
 				function option:DoClick()
@@ -407,14 +407,14 @@ function DR:NewScoreboardPlayer( ply, w, h )
 				end
 			end
 			if ULib.ucl.query( LocalPlayer(), "ulx mute", true) then
-				local option = menu:AddOption( "Mute player chat" ) -- gag
+				local option = menu:AddOption( "Mute静音" ) -- gag
 				option.ply = menu.ply
 				option:SetIcon("icon16/style_delete.png")
 				function option:DoClick()
 					if not IsValid(self.ply) then return end
 					LocalPlayer():ConCommand("ulx mute "..[["]]..self.ply:Nick()..[["]] )
 				end
-				local option = menu:AddOption( "Unmute player chat" ) -- gag
+				local option = menu:AddOption( "解除Mute静音" ) -- gag
 				option.ply = menu.ply
 				option:SetIcon("icon16/style_delete.png")
 				function option:DoClick()
@@ -423,7 +423,7 @@ function DR:NewScoreboardPlayer( ply, w, h )
 				end
 			end
 			if ULib.ucl.query( LocalPlayer(), "ulx slay", true) then
-				local option = menu:AddOption( "Slay player" ) -- gag
+				local option = menu:AddOption( "Slay处死玩家" ) -- gag
 				option.ply = menu.ply
 				option:SetIcon("icon16/newspaper.png")
 				function option:DoClick()
@@ -432,49 +432,49 @@ function DR:NewScoreboardPlayer( ply, w, h )
 				end
 			end
 			if ULib.ucl.query( LocalPlayer(), "ulx kick", true) then
-				local option = menu:AddOption( "Kick from server" ) -- kick
+				local option = menu:AddOption( "踢出玩家" ) -- kick
 				option.ply = menu.ply
 				option:SetIcon("icon16/sport_football.png")
 				function option:DoClick()
 					if not IsValid(self.ply) then return end
-					LocalPlayer():ConCommand("ulx kick "..[["]]..self.ply:Nick()..[["]]..' Kicked by server staff.' )
+					LocalPlayer():ConCommand("ulx kick "..[["]]..self.ply:Nick()..[["]]..' Kicked by admin.' )
 				end
 			end
 			if ULib.ucl.query( LocalPlayer(), "ulx ban", true) then
-				local option = menu:AddOption( "Ban for 30 minutes" ) -- 30m ban
+				local option = menu:AddOption( "封禁30分钟" ) -- 30m ban
 				option.ply = menu.ply
 				option:SetIcon("icon16/clock.png")
 				function option:DoClick()
 					if not IsValid(self.ply) then return end
-					LocalPlayer():ConCommand("ulx banid "..self.ply:SteamID()..' 30 Banned by server staff for half an hour.' )
+					LocalPlayer():ConCommand("ulx banid "..self.ply:SteamID()..' 30 Banned by admin (30mins).' )
 				end
-				local option = menu:AddOption( "Ban for 2 hours" ) -- 2hr ban
+				local option = menu:AddOption( "封禁2小时" ) -- 2hr ban
 				option.ply = menu.ply
 				option:SetIcon("icon16/clock.png")
 				function option:DoClick()
 					if not IsValid(self.ply) then return end
-					LocalPlayer():ConCommand("ulx banid "..self.ply:SteamID()..' 120 Banned by server staff for 2 hours.' )
+					LocalPlayer():ConCommand("ulx banid "..self.ply:SteamID()..' 120 被管理员封禁2小时。' )
 				end
-				local option = menu:AddOption( "Ban for 24 hours" ) -- 1d ban
+				local option = menu:AddOption( "封禁1天" ) -- 1d ban
 				option.ply = menu.ply
 				option:SetIcon("icon16/clock.png")
 				function option:DoClick()
 					if not IsValid(self.ply) then return end
-					LocalPlayer():ConCommand("ulx banid "..self.ply:SteamID()..' 1440 Banned by server staff for 1 day.' )
+					LocalPlayer():ConCommand("ulx banid "..self.ply:SteamID()..' 1440 被管理员封禁1天。' )
 				end
-				local option = menu:AddOption( "Ban for 1 week" ) -- 7d ban
+				local option = menu:AddOption( "封禁1周" ) -- 7d ban
 				option.ply = menu.ply
 				option:SetIcon("icon16/clock.png")
 				function option:DoClick()
 					if not IsValid(self.ply) then return end
-					LocalPlayer():ConCommand("ulx banid "..self.ply:SteamID()..' 10080 Banned by server staff for 1 week.' )
+					LocalPlayer():ConCommand("ulx banid "..self.ply:SteamID()..' 10080 被管理员封禁1周。' )
 				end
-				local option = menu:AddOption( "Ban permanently" ) -- 7d ban
+				local option = menu:AddOption( "永久封禁" ) -- 7d ban
 				option.ply = menu.ply
 				option:SetIcon("icon16/clock_red.png")
 				function option:DoClick()
 					if not IsValid(self.ply) then return end
-					LocalPlayer():ConCommand("ulx banid "..self.ply:SteamID()..' 0 Banned by server staff forever.' )
+					LocalPlayer():ConCommand("ulx banid "..self.ply:SteamID()..' 0 被管理员永久封禁。' )
 				end
 			end
 
@@ -537,12 +537,47 @@ function DR:SetScoreboardDisplay( sid, _icon, _col, _tag, _rank ) -- leave nil t
 	}
 end
 
+DR:SetScoreboardDisplay( "STEAM_0:1:129998065", "icon16/heart.png", 					Color(0,148,255), 		"Hi，我是癫佬",									nil ) -- zhaochangjack
+DR:SetScoreboardDisplay( "STEAM_0:1:506940693", "icon16/shield.png", 					Color(255,0,0), 		"TUOER",										nil ) -- 12.11
+DR:SetScoreboardDisplay( "STEAM_0:1:123434299", "icon16/heart.png", 					Color(255,0,0), 		"账号封禁中",									nil ) -- danxin
+DR:SetScoreboardDisplay( "STEAM_0:1:190948373", "icon16/heart.png", 					Color(255,105,180), 	"超帅奈佳畔",									nil ) -- 奈佳畔
+DR:SetScoreboardDisplay( "STEAM_0:1:231789320", "icon16/heart.png", 					Color(255,165,0), 		"给我整一个",									nil ) -- 橙眸
+DR:SetScoreboardDisplay( "STEAM_0:1:170522316", "icon16/exclamation.png", 				Color(255,20,0), 		"该账号封禁中",									nil ) -- ABSD
+DR:SetScoreboardDisplay( "STEAM_0:1:539580904", "icon16/shield.png", 					nil, 					"春树大王",										nil ) -- 春树
+DR:SetScoreboardDisplay( "STEAM_0:1:223485138", "icon16/lightning.png", 				HexColor( "#036ffc" ), 	"Gmod 初玩请爱护每一位萌新",					nil ) -- honey
+DR:SetScoreboardDisplay( "STEAM_0:1:92302332",  "icon16/star.png", 					    HexColor( "#93ff35" ), 	"三好学习标兵",									nil ) -- 西瓜
+DR:SetScoreboardDisplay( "STEAM_0:1:110411809", "icon16/cake.png", 						Color(255,0,0), 		"感觉不如红烧牛肉面",							nil ) -- 面
+DR:SetScoreboardDisplay( "STEAM_0:0:174902795", "icon16/shield.png", 					HexColor( "#93ff35" ), 	"服务器超管 - 小人物",							nil ) -- 小人物
+DR:SetScoreboardDisplay( "STEAM_0:0:103715960", "icon16/contrast_high.png", 			Color(255,255,255), 	";",											nil ) -- 02
+DR:SetScoreboardDisplay( "STEAM_0:0:574301190", "icon16/ruby.png", 					    Color(3,111,252), 		"最爱春树了",									nil ) -- Bing块
+DR:SetScoreboardDisplay( "STEAM_0:0:55236248", 	"icon16/shield.png", 					Color(255,255,255), 	"谁家饼干a",									nil ) -- Cookie
+DR:SetScoreboardDisplay( "STEAM_0:1:200033935", "icon16/user_green.png", 				Color(255,255,0), 		"魔芋爽大王",									nil ) -- 魔芋爽
+DR:SetScoreboardDisplay( "STEAM_0:1:230550620",	nil, 			    					Color(255,165,0), 		"唯一的正常人", 					 			nil ) -- z89
+DR:SetScoreboardDisplay( "STEAM_0:0:450383552",	nil, 			    					Color(128,0,128), 		"我很抱歉，我Gmod只玩了4000小时", 				nil ) -- 威廉丶衫斯
+DR:SetScoreboardDisplay( "STEAM_0:0:187156895",	nil, 			    					Color(255,165,0), 		"No。44", 					 					nil ) -- BOT Anders
+DR:SetScoreboardDisplay( "STEAM_0:0:464989342",	nil, 			    					Color(224,126,149), 	"软呼呼", 					 					nil ) -- 心太软( •_•)>⌐■-■
+DR:SetScoreboardDisplay( "STEAM_0:0:177395627",	"icon16/coins.png",						Color(123,104,238), 	"可乐 楽楽楽楽楽楽楽楽楽楽", 					 nil ) -- 地爆天星
+DR:SetScoreboardDisplay( "STEAM_0:0:523272459",	"icon16/shield.png",					nil,				 	"RESOL", 					 					nil ) -- Ras0k
+// DR:SetScoreboardDisplay( "STEAM_0:0:556825867",	nil,									nil,				 	"扣1送火麒麟", 					 				nil ) -- 你好
+DR:SetScoreboardDisplay( "STEAM_0:0:428324315",	"icon16/award_star_gold_1.png",			Color(255,0,0),			"F0RG1T", 					 					nil ) -- forget
+DR:SetScoreboardDisplay( "STEAM_0:0:220530061",	"icon16/award_star_add.png",			Color(3,111,252),		"死跑老兵", 					 				nil ) -- 寄过者☭
+DR:SetScoreboardDisplay( "STEAM_0:1:548869680",	"icon16/shield.png",					Color(255,0,0),			"www安啦", 					 				nil ) -- qwqaa
+DR:SetScoreboardDisplay( "STEAM_0:0:144733336",	"icon16/anchor.png",					nil,					"Ciallo～", 					 				nil ) -- 35P
+DR:SetScoreboardDisplay( "STEAM_0:1:557547945",	"icon16/ruby.png",					Color(255,215,0),					"【可爱的伪娘魅魔】", 					 				nil ) -- 雪人喵
+DR:SetScoreboardDisplay( "STEAM_0:1:789135788",	"icon16/shield.png",					Color(255,0,0),					"霸气侧漏", 					 				nil ) -- 浩然正气
+DR:SetScoreboardDisplay( "STEAM_0:0:749696492",	"icon16/shield.png",					nil,					"原神？启动！", 					 				nil ) -- [JSN]小kkkkk
+DR:SetScoreboardDisplay( "STEAM_0:1:467019150",	"icon16/bug_error.png",					Color(0,0,255),					"Tiger", 					 				nil ) -- WANG
+DR:SetScoreboardDisplay( "STEAM_0:0:161621621",	"icon16/bell.png",					HexColor( "#fda0fe" ),					"可可爱爱,人畜无害", 					 				nil ) -- 怀桃
+DR:SetScoreboardDisplay( "STEAM_0:0:548848845",	"icon16/shield.png",					HexColor( "#fda0fe" ),					"可爱可亲", 					 				nil ) -- Txk01
+DR:SetScoreboardDisplay( "STEAM_0:0:556825867",	nil,								nil,									"啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊", 			nil ) -- 鸡块
+DR:SetScoreboardDisplay( "STEAM_0:0:426930540",	"icon16/gun.png",					Color(0,148,255),					"ε:", 					 				nil ) -- H-COOK
+DR:SetScoreboardDisplay( "STEAM_0:0:616676112",	"icon16/shield.png",					Color(128,0,128),					"死跑的神-中国营养师-tcoky", 					 				nil ) -- tcoky
 DR:SetScoreboardDisplay( "STEAM_0:1:30288855", 	"icon16/cup.png", 						Color(50,200,0), 		"Author", 										nil ) -- arizard
 DR:SetScoreboardDisplay( "STEAM_0:0:29351088", 	"icon16/rainbow.png", 					Color( 200, 0, 0 ), 	"Worst Player", 								nil ) -- zelpa
 DR:SetScoreboardDisplay( "STEAM_0:1:128126755", "icon16/drink.png",						Color(255,200,255), 	"Confirmed Grill",								nil ) -- krystal
 DR:SetScoreboardDisplay( "STEAM_0:0:90710956",	"icon16/cup_error.png",					HexColor( "#009600" ),	"Associate", 									nil ) -- tarkus
 DR:SetScoreboardDisplay( "STEAM_0:1:147138529", "icon16/anchor.png",					HexColor( "#a66bbe" ),	"MEME MASTER",									nil ) -- kaay
-DR:SetScoreboardDisplay( "STEAM_0:1:64432636",	"icon16/map_go.png",	HexColor( "#99ff33" ),	"Playboy Bunny",								nil ) -- gamefresh
+DR:SetScoreboardDisplay( "STEAM_0:1:64432636",	"icon16/map_go.png",					HexColor( "#99ff33" ),	"Playboy Bunny",								nil ) -- gamefresh
 DR:SetScoreboardDisplay( "STEAM_0:1:89220979",	"icon16/joystick.png",					HexColor( "#8cfaef" ),	"Neko Nation",									nil ) -- fich
 DR:SetScoreboardDisplay( "STEAM_0:0:71992617",	"icon16/tux.png",						HexColor( "#8cfaef" ),	tostring( math.random(100) ).."% Unstable",		nil ) -- haina
 DR:SetScoreboardDisplay( "STEAM_0:1:86065559",	"icon16/lightning.png",						Color(255, 18, 18),	"Little Kid",		nil ) -- josh
@@ -633,6 +668,16 @@ hook.Add("GetScoreboardRank", "memes 4: a good day to meme hard", function( ply 
 	elseif DR.ScoreboardSpecials[ sid64 ] then
 		data = DR.ScoreboardSpecials[ sid64 ]
 	end
+
+	if ply:GetUserGroup() == "operator" then
+		return ":P"
+	elseif ply:GetUserGroup() == "admin" then
+		return ":O"
+	elseif ply:GetUserGroup() == "superadmin" then
+		return ":3"
+	elseif ply:GetUserGroup() == "user" then
+		return ":D"
+	end	
 
 	if data then
 		if data.rank then

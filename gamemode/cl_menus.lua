@@ -1,16 +1,16 @@
 print("Loaded cl_menus.lua...")
 
 local crosshair_convars = {
-	{"header", "Crosshair Dimensions"},
-	{"number", "deathrun_crosshair_thickness",0,16, "Stroke Thickness"},
-	{"number", "deathrun_crosshair_gap",0,32, "Inner Gap"},
-	{"number", "deathrun_crosshair_size",0,32, "Stroke Length"},
+	{"header", "准星形状"},
+	{"number", "deathrun_crosshair_thickness",0,16, "线条粗细"},
+	{"number", "deathrun_crosshair_gap",0,32, "线条间隔"},
+	{"number", "deathrun_crosshair_size",0,32, "线条长度"},
 
-	{"header", "Crosshair Color"},
-	{"number", "deathrun_crosshair_red",0,255, "Red"},
-	{"number", "deathrun_crosshair_green",0,255, "Green"},
-	{"number", "deathrun_crosshair_blue",0,255, "Blue"},
-	{"number", "deathrun_crosshair_alpha",0,255, "Transparency"},
+	{"header", "准星颜色"},
+	{"number", "deathrun_crosshair_red",0,255, "红色"},
+	{"number", "deathrun_crosshair_green",0,255, "绿色"},
+	{"number", "deathrun_crosshair_blue",0,255, "蓝色"},
+	{"number", "deathrun_crosshair_alpha",0,255, "透明度"},
 }
 
 function DR:OpenCrosshairCreator()
@@ -18,7 +18,7 @@ function DR:OpenCrosshairCreator()
 	frame:SetSize(640,480)
 	frame:Center()
 	frame:MakePopup()
-	frame:SetTitle("Crosshair Creator")
+	frame:SetTitle("Crosshair 准星设置")
 
 	local panel = vgui.Create("DPanel", frame)
 	panel:SetSize( frame:GetWide()-8, frame:GetTall()-44 )
@@ -89,7 +89,7 @@ function DR:OpenCrosshairCreator()
 	local lbl = vgui.Create("DLabel")
 	lbl:SetFont("deathrun_derma_Medium")
 	lbl:SetTextColor(DR.Colors.Text.Turq)
-	lbl:SetText("Crosshair Options")
+	lbl:SetText("准星设置")
 	lbl:SizeToContents()
 	lbl:SetWide( dlist:GetWide() )
 	dlist:Add(lbl)
@@ -166,10 +166,10 @@ function DR:OpenHelp()
 	frame:SetSize(ScrW(), ScrH())
 	frame:Center()
 	frame:MakePopup()
-	frame:SetTitle("Deathrun Help")
+	frame:SetTitle("帮助信息")
 
 	local lbl = vgui.Create("DLabel", frame)
-	lbl:SetText("Please wait while page loads...")
+	lbl:SetText("页面加载中...")
 	lbl:SetFont("deathrun_derma_Large")
 	lbl:SizeToContents()
 	lbl:Center()
@@ -186,39 +186,39 @@ concommand.Add("deathrun_open_help", function()
 end)
 
 local deathrun_settings = {
-	{"header","HUD Settings"},
+	{"header","HUD 选项"},
 
-	{"number", "deathrun_hud_theme",0,4,"HUD Theme"},
-	{"number", "deathrun_hud_position",0,8,"Position of the HUD (HP, Velocity, Time)"},
-	{"number", "deathrun_hud_ammo_position",0,8,"Position of the Ammo HUD"},
-	{"number", "deathrun_hud_alpha",0,255,"Transparency of the HUD background"},
-	{"number", "deathrun_targetid_fade_duration",0,10,"TargetID fade duration"},
-	{"boolean", "deathrun_zones_visibility", "Toggle Zone Visibility"},
-	{"boolean", "deathrun_stats_visibility", "Toggle the YOUR STATS popup"},
+	{"number", "deathrun_hud_theme",0,4,"HUD 主题"},
+	{"number", "deathrun_hud_position",0,8,"HUD 位置 (左下角：HP, Velocity-速度, Time-时间)"},
+	{"number", "deathrun_hud_ammo_position",0,8,"弹药HUD 位置"},
+	{"number", "deathrun_hud_alpha",0,255,"HUD 透明度"},
+	{"number", "deathrun_targetid_fade_duration",0,10,"名牌ID 消失时间"},
+	{"boolean", "deathrun_zones_visibility", "终点区域可见性"},
+	{"boolean", "deathrun_stats_visibility", "开启/关闭 开局时“统计信息”弹窗"},
 
-	{"header", "Spectator Settings"},
+	{"header", "观察者..."},
 
-	{"boolean", "deathrun_spectate_only", "Spectate-only mode"},
+	{"boolean", "deathrun_spectate_only", "加入观察者队伍"},
 
-	{"header", "Thirdperson Settings"},
+	{"header", "第三人称..."},
 
-	{"boolean", "deathrun_thirdperson_enabled", "Thirdperson mode"},
-	{"number", "deathrun_thirdperson_opacity", 5,255, "Transparency of your playermodel in Thirdperson mode"},
-	{"number", "deathrun_thirdperson_offset_x", -40, 40, "Thirdperson camera horizontal offset"},
-	{"number", "deathrun_thirdperson_offset_y", -40, 40, "Thirdperson camera vertical offset"},
-	{"number", "deathrun_thirdperson_offset_z", -75, 75, "Thirdperson camera forward-backward offset"},
-	{"number", "deathrun_thirdperson_offset_pitch", -75, 75, "Thirdperson camera Pitch offset"},
-	{"number", "deathrun_thirdperson_offset_yaw", -75, 75, "Thirdperson camera Yaw offset"},
-	{"number", "deathrun_thirdperson_offset_roll", -75, 75, "Thirdperson camera Roll offset"},
+	{"boolean", "deathrun_thirdperson_enabled", "第三人称模式"},
+	{"number", "deathrun_thirdperson_opacity", 5,255, "第三人称下人物模型透明度"},
+	{"number", "deathrun_thirdperson_offset_x", -40, 40, "第三人称：相机水平偏移"},
+	{"number", "deathrun_thirdperson_offset_y", -40, 40, "第三人称：相机垂直偏移"},
+	{"number", "deathrun_thirdperson_offset_z", -75, 75, "第三人称：相机位置前后偏移"},
+	{"number", "deathrun_thirdperson_offset_pitch", -75, 75, "第三人称：相机高度偏移"},
+	{"number", "deathrun_thirdperson_offset_yaw", -75, 75, "第三人称：相机姿态(yaw)偏移"},
+	{"number", "deathrun_thirdperson_offset_roll", -75, 75, "第三人称：相机水平线(roll)偏移"},
 
-	{"header", "Other Settings"},
+	{"header", "其他选项..."},
 
-	{"boolean", "deathrun_round_cues", "Audible round cues at starts and ends of rounds"},
-	{"boolean", "deathrun_info_on_join", "Show the info menu when joining the server"},
-	{"boolean", "deathrun_autojump","Autojump (Enabling this limits velocity depending on server settings.)"},
-	{"boolean", "deathrun_enable_announcements", "Enable help messages"},
-	{"number", "deathrun_announcement_interval", 0, 500, "Seconds between help messages."},
-	{"number", "deathrun_teammate_fade_distance", 0, 512, "Teammate fade distance."},
+	{"boolean", "deathrun_round_cues", "在开局/结束时播放声音"},
+	{"boolean", "deathrun_info_on_join", "在进入服务器时显示MOTD公告（建议关闭）"},
+	{"boolean", "deathrun_autojump","自动连跳（建议开启，本服务器没有限速）"},
+	{"boolean", "deathrun_enable_announcements", "启用帮助信息（[HELP]开头的广播）"},
+	{"number", "deathrun_announcement_interval", 0, 500, "帮助信息广播间隔"},
+	{"number", "deathrun_teammate_fade_distance", 0, 512, "队友消逝距离"},
 
 
 }
@@ -240,7 +240,7 @@ function DR:OpenSettings()
 	frame:SetSize(480,640)
 	frame:Center()
 	frame:MakePopup()
-	frame:SetTitle("Deathrun Settings")
+	frame:SetTitle("Deathrun Settings 选项")
 
 	local controls = vgui.Create("DPanel", frame)
 	controls:SetSize( frame:GetWide()-8, frame:GetTall()-44 )
@@ -278,7 +278,7 @@ function DR:OpenSettings()
 	local lbl = vgui.Create("DLabel")
 	lbl:SetFont("deathrun_derma_Medium")
 	lbl:SetTextColor(DR.Colors.Text.Turq)
-	lbl:SetText("Local Settings")
+	lbl:SetText("选项（本地）")
 	lbl:SizeToContents()
 	lbl:SetWide( dlist:GetWide() )
 	dlist:Add(lbl)
@@ -318,7 +318,7 @@ function DR:OpenSettings()
 
 			local check = vgui.Create("AuToggle_Deathrun")
 			check:SetValue( GetConVar(v[2]):GetInt() )
-			check:SetText("Enabled")
+			check:SetText("启用")
 			check:SetTextColor( DR.Colors.Text.Grey3 )
 			check:SizeToContents()
 			check:SetConVar(v[2])
@@ -367,7 +367,7 @@ function DR:OpenSettings()
 	local lbl = vgui.Create("DLabel")
 	lbl:SetFont("deathrun_derma_Tiny")
 	lbl:SetTextColor(DR.Colors.Text.Turq)
-	lbl:SetText(os.date( "%H:%M:%S on %d/%m/%Y", DR.TimeStamp or os.time() ))
+	lbl:SetText(os.date( "%H:%M:%S , %d/%m/%Y", DR.TimeStamp or os.time() ))
 	lbl:SizeToContents()
 	lbl:SetWide( dlist:GetWide() )
 	dlist:Add(lbl)
@@ -381,7 +381,7 @@ function DR:OpenZoneEditor()
 	frame:SetSize(320,480)
 	frame:Center()
 	frame:MakePopup()
-	frame:SetTitle("Zone Editor")
+	frame:SetTitle("区域编辑器")
 
 	local panel = vgui.Create("DPanel", frame)
 	panel:SetSize( frame:GetWide()-8, frame:GetTall()-44 )
@@ -418,7 +418,7 @@ function DR:OpenZoneEditor()
 	local lbl = vgui.Create("DLabel")
 	lbl:SetFont("deathrun_derma_Small")
 	lbl:SetTextColor(DR.Colors.Text.Turq)
-	lbl:SetText("Create Zone")
+	lbl:SetText("创建区域")
 	lbl:SizeToContents()
 	lbl:SetWide( dlist:GetWide() )
 	dlist:Add(lbl)
@@ -426,20 +426,20 @@ function DR:OpenZoneEditor()
 	local lbl = vgui.Create("DLabel")
 	lbl:SetFont("deathrun_derma_Tiny")
 	lbl:SetTextColor( DR.Colors.Text.Grey3 )
-	lbl:SetText("Zone Name:")
+	lbl:SetText("区域名称：")
 	lbl:SizeToContents()
 	lbl:SetWide( dlist:GetWide()/2 -2 )
 	dlist:Add(lbl)
 
 	local te = vgui.Create("DTextEntry")
 	te:SetSize( dlist:GetWide()/2 -2, 18 )
-	te:SetText("new_zone")
+	te:SetText("endmap")
 	dlist:Add(te)
 
 	local lbl = vgui.Create("DLabel")
 	lbl:SetFont("deathrun_derma_Tiny")
 	lbl:SetTextColor( DR.Colors.Text.Grey3 )
-	lbl:SetText("Zone Type:")
+	lbl:SetText("区域类型：")
 	lbl:SizeToContents()
 	lbl:SetWide( dlist:GetWide()/2 -2 )
 	dlist:Add(lbl)
@@ -454,7 +454,7 @@ function DR:OpenZoneEditor()
 
 	local sbmt =  vgui.Create("deathrun_button")
 	sbmt:SetSize(dlist:GetWide(), 18)
-	sbmt:SetText("Create Zone")
+	sbmt:SetText("创建区域")
 	sbmt:SetFont("deathrun_derma_Tiny")
 	sbmt:SetOffsets(0,0)
 	dlist:Add(sbmt)
@@ -464,7 +464,7 @@ function DR:OpenZoneEditor()
 	sbmt.dd = dd
 
 	function te:OnTextChanged()
-		self.sbmt:SetText("Create Zone '"..self:GetText().."'")
+		self.sbmt:SetText("创建 '"..self:GetText().."' 区域。")
 	end
 
 	function sbmt:DoClick()
@@ -476,14 +476,14 @@ function DR:OpenZoneEditor()
 	local lbl = vgui.Create("DLabel")
 	lbl:SetFont("deathrun_derma_Small")
 	lbl:SetTextColor(DR.Colors.Text.Turq)
-	lbl:SetText("Modify Zone")
+	lbl:SetText("更改区域")
 	lbl:SizeToContents()
 	lbl:SetWide( dlist:GetWide() )
 	dlist:Add(lbl)
 
 	local dd = vgui.Create("DComboBox")
 	dd:SetSize( dlist:GetWide(), 18 )
-	dd:SetValue(LocalPlayer().LastSelectZone or "Select Zone")
+	dd:SetValue(LocalPlayer().LastSelectZone or "选择区域")
 	for name,z in pairs(ZONE.zones) do
 		if z.type then
 			dd:AddChoice( name )
@@ -504,11 +504,11 @@ function DR:OpenZoneEditor()
 			if zone.type then
 				local col = zone.color
 				local info = {
-					"Zone Name: "..self.dd:GetValue(),
-					"Zone Type: "..zone.type,
+					"区域名称："..self.dd:GetValue(),
+					"区域类型："..zone.type,
 					"Pos1: "..tostring(zone.pos1),
 					"Pos2: "..tostring(zone.pos2),
-					"Color:".." "..tostring(col.r).." "..tostring(col.g).." "..tostring(col.b).." "..tostring(col.a),
+					"颜色：".." "..tostring(col.r).." "..tostring(col.g).." "..tostring(col.b).." "..tostring(col.a),
 				}
 
 				for i = 1, #info do
@@ -532,7 +532,7 @@ function DR:OpenZoneEditor()
 
 	local but =  vgui.Create("deathrun_button")
 	but:SetSize(dlist:GetWide(), 18)
-	but:SetText("Set zone color")
+	but:SetText("设置区域颜色")
 	but:SetFont("deathrun_derma_Tiny")
 	but:SetOffsets(0,0)
 	but.dd = dd
@@ -545,7 +545,7 @@ function DR:OpenZoneEditor()
 
 	local but =  vgui.Create("deathrun_button")
 	but:SetSize(dlist:GetWide(), 18)
-	but:SetText("Set Pos1 to eyetrace")
+	but:SetText("将Pos1设置为目前注视的坐标")
 	but:SetFont("deathrun_derma_Tiny")
 	but:SetOffsets(0,0)
 	but.dd = dd
@@ -556,7 +556,7 @@ function DR:OpenZoneEditor()
 
 	local but =  vgui.Create("deathrun_button")
 	but:SetSize(dlist:GetWide(), 18)
-	but:SetText("Set Pos2 to eyetrace")
+	but:SetText("将Pos2设置为目前注视的坐标")
 	but:SetFont("deathrun_derma_Tiny")
 	but:SetOffsets(0,0)
 	but.dd = dd
@@ -567,7 +567,7 @@ function DR:OpenZoneEditor()
 
 	local but =  vgui.Create("deathrun_button")
 	but:SetSize(dlist:GetWide(), 18)
-	but:SetText("Remove this zone")
+	but:SetText("移除这个区域")
 	but:SetFont("deathrun_derma_Tiny")
 	but:SetOffsets(0,0)
 	but.dd = dd
@@ -591,7 +591,7 @@ MOTDConVars.Title = GetConVar("deathrun_motd_title")
 MOTDConVars.URL = GetConVar("deathrun_motd_url")
 
 DR.MOTDEnabled = MOTDConVars.Enabled:GetBool()
-DR.MOTDTitle = MOTDConVars.Title:GetString() or "Deathrun Information"
+DR.MOTDTitle = MOTDConVars.Title:GetString() or "一些信息..."
 DR.MOTDWidth = DR.MOTDWidth or ScrW()-320
 DR.MOTDHeight = DR.MOTDHeight or ScrH()-240
 DR.MOTDPage = MOTDConVars.URL:GetString() or "http://arizard.github.io/deathruninfo.html"
@@ -630,7 +630,7 @@ function DR:OpenQuickInfo()
 	end
 
 	local lbl = vgui.Create("DLabel", frame)
-	lbl:SetText("Please wait while page loads...")
+	lbl:SetText("页面加载中...")
 	lbl:SetFont("deathrun_derma_Large")
 	lbl:SizeToContents()
 	lbl:Center()
@@ -710,7 +710,7 @@ function DR:OpenWaitingMenu()
 	frame:SetSize(600,270)
 	frame:Center()
 	frame:MakePopup()
-	frame:SetTitle("Waiting For Players")
+	frame:SetTitle("正在等待玩家...")
 
 	local panel = vgui.Create("panel", frame)
 	panel:SetSize(frame:GetWide()-8, frame:GetTall()-44)
@@ -724,15 +724,14 @@ function DR:OpenWaitingMenu()
 
 		local ix, iy, iw, ih = x+8, y+8, w-16, h-16
 
-		local info = [[Welcome to the server! Currently there are no players online. 
-		This means that you can explore the map at your own pace 
-		from the safety of godmode, so you can practice 
-		your Bhop and check for auto-traps with ease.\n\n
-		Some useful commands:\n
-		\t\b !respawn - Respawn yourself.\n
-		\t\b !cleanup - Reset all traps on the map.\n
-		\t\b !help - View the help menu.\n\n
-		Enjoy, and have fun!]]
+		local info = [[欢迎！但是现在并没有在线玩家……
+		您现在处于无敌状态。\n\n
+		按V开启飞行模式。\n\n
+		一些指令：\n
+		\t\b !respawn - 重生。\n
+		\t\b !cleanup - 重置地图。\n
+		\t\b !help - 查看帮助。\n\n
+		开始探索吧！]]
 
 		info = DR:GetWordWrapText( info, iw, "deathrun_hud_Medium_light" )
 		deathrunShadowText(info, "deathrun_hud_Medium_light", ix, iy, HexColor("#303030"), nil, nil, 0 )
@@ -748,7 +747,7 @@ function DR:OpenForcedSpectatorMenu( msg )
 	local frame = vgui.Create( "deathrun_window" )
 	frame:SetSize( 640, 200 )
 	frame:Center()
-	frame:SetTitle("Moved to Spectator")
+	frame:SetTitle("您当前正在观察者队伍。")
 	frame:MakePopup()
 
 	local panel = vgui.Create("panel", frame)
@@ -777,7 +776,7 @@ function DR:OpenForcedSpectatorMenu( msg )
 	local cont = vgui.Create("deathrun_button", panel)
 	cont:SetSize((panel:GetWide() - 3*4)/2, 32 )
 	cont:SetPos(4, panel:GetTall()-32 -4)
-	cont:SetText("No, I'm okay with this.")
+	cont:SetText("继续观察。")
 
 	function cont:DoClick()
 		self:GetParent():GetParent():Close()
@@ -786,7 +785,7 @@ function DR:OpenForcedSpectatorMenu( msg )
 	local back = vgui.Create("deathrun_button", panel)
 	back:SetSize((panel:GetWide() - 3*4)/2, 32 )
 	back:SetPos(8+(panel:GetWide() - 3*4)/2, panel:GetTall()-32 -4)
-	back:SetText("Yes, please move me back.")
+	back:SetText("离开观察者队伍。")
 	function back:DoClick()
 		LocalPlayer():ConCommand("deathrun_spectate_only 0")
 		self:GetParent():GetParent():Close()

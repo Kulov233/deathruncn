@@ -90,8 +90,10 @@ DR.Ranks["user"] = 1 -- access levels
 DR.Ranks["regular"] = 1 -- ranks are case sensitive, Admin /= admin
 DR.Ranks["moderator"] = 2
 DR.Ranks["mod"] = 2
+DR.Ranks[":P"] = 2
 DR.Ranks["admin"] = 3
 DR.Ranks["superadmin"] = 3
+DR.Ranks[":3"] = 3
 DR.Ranks["owner"] = 3
 
 DR.Ranks["atari"] = 2

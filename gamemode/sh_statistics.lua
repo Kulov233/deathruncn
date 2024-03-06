@@ -38,7 +38,7 @@ if SERVER then
 
 		-- deathrun_send_map_records
 		--
-		res = sql.Query("SELECT * FROM deathrun_records WHERE mapname = '"..game.GetMap().."' ORDER BY seconds ASC LIMIT 3")
+		res = sql.Query("SELECT * FROM deathrun_records WHERE mapname = '"..game.GetMap().."' GROUP BY sid64 ORDER BY min(seconds) ASC LIMIT 10")
 
 		--PrintTable( endmap )
 		if endmap ~= nil and res ~= false then
@@ -57,7 +57,7 @@ if SERVER then
 		end
 
 		for k,ply in ipairs(player.GetAll()) do
-			res2 = sql.Query("SELECT * FROM deathrun_records WHERE mapname = '"..game.GetMap().."' AND sid64 = '"..ply:SteamID64().."' ORDER BY seconds ASC LIMIT 3")
+			res2 = sql.Query("SELECT * FROM deathrun_records WHERE mapname = '"..game.GetMap().."' AND sid64 = '"..ply:SteamID64().."' ORDER BY seconds ASC LIMIT 10")
 			if endmap ~= nil and res2 ~= false then
 				local seconds = -1
 				if res2 ~= nil then
@@ -275,14 +275,14 @@ if CLIENT then
 			end
 		end
 
-		local msg = [[Stats for ]]..name..[[:
-	Kills: ]]..tostring(t[1]["kills"])..[[
+		local msg = [[统计信息： ]]..name..[[：
+	击杀总数： ]]..tostring(t[1]["kills"])..[[
 
-	Deaths: ]]..tostring(t[1]["deaths"])..[[
+	死亡总数： ]]..tostring(t[1]["deaths"])..[[
 
-	Runner Wins: ]]..tostring(t[1]["runner_wins"])..[[
+	作为奔跑者胜利次数： ]]..tostring(t[1]["runner_wins"])..[[
 
-	Death Wins: ]]..tostring(t[1]["death_wins"])..[[
+	作为死神胜利次数： ]]..tostring(t[1]["death_wins"])..[[
 ]]
 
 		DR:ChatMessage( msg )
@@ -321,11 +321,11 @@ if CLIENT then
 				}
 
 				labels = {
-					"Your Kills",
-					"Your Deaths",
-					"Your Runner Wins",
-					"Your Death Wins",
-					"Most Wins",
+					"击杀总数",
+					"死亡总数",
+					"作为奔跑者胜利次数",
+					"作为死神胜利次数",
+					"胜利次数最多的玩家",
 				}
 
 				stats3d.pos = LocalPlayer():EyePos() + LocalPlayer():EyeAngles():Forward()*36
@@ -395,7 +395,7 @@ if CLIENT then
 				surface.SetDrawColor( DR.Colors.Turq )
 				surface.DrawRect(x,y,w,80)
 
-				deathrunShadowTextSimple("STATS", "deathrun_3d2d_large", 0, y, DR.Colors.Clouds, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 2)
+				deathrunShadowTextSimple("STATS 统计信息", "deathrun_3d2d_large", 0, y, DR.Colors.Clouds, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 2)
 
 				
 
@@ -440,7 +440,7 @@ if CLIENT then
 					surface.SetDrawColor( DR.Colors.Turq )
 					surface.DrawRect(-700,-300, 1400, 80 )
 
-					deathrunShadowTextSimple("TOP 3 RECORDS", "deathrun_3d2d_large", 0, -300, DR.Colors.Clouds, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 2)
+					deathrunShadowTextSimple("本地图纪录（只显示最佳成绩）...", "deathrun_3d2d_large", 0, -300, DR.Colors.Clouds, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 2)
 						
 					if DR.MapRecordsCache[1] ~= nil then
 						for i = 1, #DR.MapRecordsCache + 2 do
@@ -454,7 +454,7 @@ if CLIENT then
 								surface.SetDrawColor( DR.Colors.Turq )
 								surface.DrawRect(-700,-150 + 100*k + 80, 1400, 2 )
 							elseif i == #DR.MapRecordsCache + 2 and DR.MapPBCache ~= 0 then
-								deathrunShadowTextSimple( "Personal Best", "deathrun_3d2d_large", -700, -150 + 100*k, DR.Colors.Text.Clouds, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 2 )
+								deathrunShadowTextSimple( "个人纪录", "deathrun_3d2d_large", -700, -150 + 100*k, DR.Colors.Text.Clouds, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 2 )
 								deathrunShadowTextSimple( string.ToMinutesSecondsMilliseconds( DR.MapPBCache or 0 ), "deathrun_3d2d_large", 700, -150 + 100*k, DR.Colors.Text.Turq, TEXT_ALIGN_RIGHT, TEXT_ALIGN_TOP, 2 )
 
 								surface.SetDrawColor( DR.Colors.Turq )
@@ -462,7 +462,7 @@ if CLIENT then
 							end
 						end
 					else
-						deathrunShadowTextSimple( "No records yet!", "deathrun_3d2d_large", 0, -200, DR.Colors.Text.Clouds, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 2 )
+						deathrunShadowTextSimple( "暂时还没有纪录。", "deathrun_3d2d_large", 0, -200, DR.Colors.Text.Clouds, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 2 )
 					end
 				cam.End3D2D()
 			end

@@ -110,12 +110,12 @@ hook.Add("PlayerInitialSpawn", "DeathrunPlayerInitialSpawn", function( ply )
 	ply.FirstSpawn = true
 	ply:SetTeam( TEAM_SPECTATOR )
 	--ply:Spawn()
-	DR:ChatBroadcast(ply:Nick().." has joined the server.")
+	DR:ChatBroadcast(ply:Nick().." 加入了服务器。")
 
 end)
 
 hook.Add("PlayerDisconnected", "DeathrunPlayerDisconnectMessage", function( ply )
-	DR:ChatBroadcast( ply:Nick().." has left the server." )
+	DR:ChatBroadcast( ply:Nick().." 离开了服务器。" )
 end)
 
 CreateConVar("deathrun_death_model", "models/player/monk.mdl", defaultFlags, "The default model for the Deaths." )
@@ -155,7 +155,7 @@ local function SpawnSpectator( ply )
 	ply:KillSilent()
 	ply:SetTeam( TEAM_SPECTATOR )
 	ply:BeginSpectate()
-
+	
 	return GAMEMODE:PlayerSpawnAsSpectator( ply )
 end
 
@@ -228,6 +228,14 @@ function GM:PlayerSpawn( ply )
 	return self.BaseClass:PlayerSpawn( ply )
 end
 
+function GM:PlayerNoClip(ply, desiredState)
+    if ply:Team() == TEAM_GHOST or ROUND:GetCurrent() == ROUND_WAITING then
+        return true
+    else
+        return false
+    end
+end
+
 CreateConVar("deathrun_death_sprint", "650", defaultFlags, "Sprint speed for Death team.")
 CreateConVar("deathrun_starting_weapon", "weapon_crowbar", defaultFlags, "Starting weapon for both teams.")
 
@@ -245,8 +253,8 @@ function GM:PlayerLoadout( ply )
 	ply:SetPlayerColor( playercol )
 
 	-- run speeds and jump powah
-	ply:SetRunSpeed( 250 )
-	ply:SetWalkSpeed( 250 )
+	ply:SetRunSpeed( 300 )
+	ply:SetWalkSpeed( 300 )
 	ply:SetJumpPower( 290 )
 
 	if ply:Team() == TEAM_DEATH then
@@ -268,17 +276,57 @@ hook.Add("AcceptInput", "DeathrunKillers", function( ent, input, activator, call
 end)
 
 local causesOfDeath = {
-	"Natural causes",
-	"Inappropriate yelling",
-	"Vehicular homicide",
-	"Bio-engineered assault turtles with acid breath",
-	"Dark and mysterious forces beyond our control",
-	"Joe Biden",
-	"The cool, refreshing taste of Pepsi®",
-	"The Patriarchy",
-	"The rains down in Africa",
-	"The horses",
-	"A saxophone solo"
+	"黑暗力量",
+	"外放的抖音",
+	"网课",
+	"时间管理专业课程",
+	"只因你太美",
+	"松果弹抖闪电鞭",
+	"无法成功刷纪录的痛",
+	"GTX 690",
+	"百度网盘",
+	"然然",
+	"Strafe的困难程度",
+	"Ubisoft Connect",
+	"Origin",
+	"生瓜蛋子",
+	"蜜雪冰城甜蜜蜜",
+	"提走宝马X1的快乐",
+	"马老师",
+	"外星势力",
+	"纱雾",
+	"骁龙888",
+	"永远的14nm",
+	"有一个人前来买瓜",
+	"吸铁石",
+	"九转大肠",
+	"ノリノリひとり",
+	"可是雪，飘进双眼",
+	"虹夏妈妈",
+	"炫狗",
+	"皇室战争国服",
+	"Apex Legends",
+	"jvav",
+	"绝味鸭脖",
+	"Aimware",
+	"Sigma Client",
+	"冰",
+	"说的道理",
+	"说的道莉",
+	"Explosion",
+	"Atomic",
+	"骁龙8 Gen 1",
+	"八级大狂风",
+	"iPhone 15",
+	"We live, we love, we lie",
+	"Blue Archive",
+	"原神",
+	"星穹铁道",
+	"城市：天际线2",
+	"他推的老子",
+	"《诗经·彼阳》",
+	"非法所得",
+	"叮咚鸡"
 }
 
 function GM:PlayerDeath( ply, inflictor, attacker )
@@ -466,8 +514,8 @@ function GM:EntityTakeDamage( target, dmginfo )
 	local attacker = dmginfo:GetAttacker()
 
 	if target:IsPlayer() then
-		if ROUND:GetCurrent() == ROUND_WAITING or ROUND:GetCurrent() == ROUND_PREP then
-			target:DeathrunChatPrint("You took "..tostring(dmginfo:GetDamage()).." damage.")
+		if ROUND:GetCurrent() == ROUND_WAITING or ROUND:GetCurrent() == ROUND_PREP or target:Team() == TEAM_GHOST then
+			target:DeathrunChatPrint("您受到了 "..tostring(dmginfo:GetDamage()).." 点伤害。")
 			dmginfo:SetDamage(0)
 		end
 	end
@@ -531,12 +579,12 @@ concommand.Add("deathrun_toggle_mute", function(ply, cmd, args)
 		for k,v in ipairs(ply.mutelist) do
 			if v == id then 
 				table.remove( ply.mutelist, k )
-				ply:DeathrunChatPrint( "Player was unmuted." ) 
+				ply:DeathrunChatPrint( "成功解除静音。" ) 
 			end
 		end
 	else
 		table.insert( ply.mutelist, id )
-		ply:DeathrunChatPrint( "Player was muted." )
+		ply:DeathrunChatPrint( "静音成功。" )
 	end
 
 	net.Start("DeathrunSyncMutelist")
@@ -835,10 +883,10 @@ net.Receive("DeathrunForceSpectator", function(len, ply)
 
 		if targ ~= nil then
 			targ:ConCommand("deathrun_spectate_only 1")
-			ply:DeathrunChatPrint( "Forced "..targ:Nick().." to the spectator team!" )
+			ply:DeathrunChatPrint( "强制 "..targ:Nick().." 加入观察者队伍。" )
 		end
 	else
-		ply:DeathrunChatPrint( "You don't have access to this." )
+		ply:DeathrunChatPrint( "您没有足够的权限。" )
 	end
 end)
 

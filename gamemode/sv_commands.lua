@@ -71,9 +71,9 @@ concommand.Add("deathrun_respawn",function(ply, cmd, args)
 				end
 			end
 
-			DeathrunSafeChatPrint( ply, "Respawned "..string.sub(players,1,-3)..".")
+			DeathrunSafeChatPrint( ply, "重生了 "..string.sub(players,1,-3).."。")
 		else
-			DeathrunSafeChatPrint( ply, "You are not allowed to do that.")
+			DeathrunSafeChatPrint( ply, "您没有足够的权限。")
 		end
 	
 	elseif not args[1] then
@@ -81,12 +81,12 @@ concommand.Add("deathrun_respawn",function(ply, cmd, args)
 			ply:KillSilent()
 			ply:Spawn()
 
-			DeathrunSafeChatPrint( ply, "Respawned yourself.")
+			DeathrunSafeChatPrint( ply, "重生成功。")
 		else
-			DeathrunSafeChatPrint( ply, "You can't do that right now.")
+			DeathrunSafeChatPrint( ply, "您没有足够的权限。")
 		end
 	else
-		DeathrunSafeChatPrint( ply, "Could not execute command.")
+		DeathrunSafeChatPrint( ply, "无法执行命令。")
 	end
 
 end, nil, nil, FCVAR_SERVER_CAN_EXECUTE )
@@ -96,9 +96,9 @@ concommand.Add("deathrun_cleanup",function(ply, cmd, args)
 	
 		if DR:CanAccessCommand( ply, cmd ) or ROUND:GetCurrent() == ROUND_WAITING then
 			game.CleanUpMap()
-			DeathrunSafeChatPrint( ply, "Cleaned up the map and reset entities.")
+			DeathrunSafeChatPrint( ply, "重置地图成功。")
 		else
-			DeathrunSafeChatPrint( ply, "You are not allowed to do that.")
+			DeathrunSafeChatPrint( ply, "您没有足够的权限。")
 		end
 
 
@@ -116,9 +116,9 @@ concommand.Add("deathrun_get_stats", function( ply, cmd, args )
 			net.WriteTable( sql.Query( "SELECT * FROM deathrun_stats WHERE sid = '"..targets[1]:SteamID().."'") )
 			net.Send( ply )
 		elseif #targets > 1 then
-			DeathrunSafeChatPrint( ply, "One player at a time, please." )
+			DeathrunSafeChatPrint( ply, "一次查询只允许查询一个玩家的信息。" )
 		else
-			DeathrunSafeChatPrint( ply, "No targets found with that name.")
+			DeathrunSafeChatPrint( ply, "没有找到玩家。")
 		end
 
 	elseif not args[1] then
@@ -128,7 +128,7 @@ concommand.Add("deathrun_get_stats", function( ply, cmd, args )
 		net.Send( ply )
 		--print('meme')
 	else
-		DeathrunSafeChatPrint( ply, "Could not execute command.")
+		DeathrunSafeChatPrint( ply, "无法执行命令。")
 	end
 end)
 
@@ -257,9 +257,9 @@ concommand.Add("deathrun_unstuck", function( ply, cmd, args )
 
 		stuckers[ply:SteamID64()] = CurTime()
 
-		DR:ChatBroadcast( ply:Nick().." attempted to free themselves from the clutches of a bugged trap.")
+		DR:ChatBroadcast( ply:Nick().." 使用了!stuck命令来尝试在被卡住的困境中脱身。")
 	else
-		ply:DeathrunChatPrint("You can't use that right now.")
+		ply:DeathrunChatPrint("您暂时不能这样做。")
 	end
 
 end)
@@ -275,13 +275,13 @@ concommand.Add("deathrun_punish", function( ply, cmd, args )
 		if DR:CanAccessCommand( ply, cmd ) then
 			local targets = FindPlayersByName( args[1] )
 			if #targets == 0 then
-				ply:DeathrunSafeChatPrint("No targets to punish.")
+				ply:DeathrunSafeChatPrint("没有惩罚的目标。")
 			elseif #targets == 1 then
 				local t = targets[1]
 				DR:PunishDeathAvoid( t, tonumber(args[2]) )
-				DeathrunSafeChatPrint(ply,"Punishing "..tostring(t:Nick()).." for another "..tostring( DR:GetDeathAvoid( t ) ).." rounds.")
+				DeathrunSafeChatPrint(ply,"已经惩罚 "..tostring(t:Nick()).." ，他还需要再扮演 "..tostring( DR:GetDeathAvoid( t ) ).." 局死神。")
 			elseif #targets > 1 then
-				ply:DeathrunSafeChatPrint("Too many targets to punish.")
+				ply:DeathrunSafeChatPrint("惩罚的目标太多了。")
 			end
 		end
 	end

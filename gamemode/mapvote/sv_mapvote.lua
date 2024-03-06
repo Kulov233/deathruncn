@@ -176,12 +176,12 @@ function MV:FinishMapVote()
 
 	if win == "" then win = table.Random( MV.VotingMapsNoVotes ) end
 
-	DR:ChatBroadcast("The next map will be "..win..". Map will change in 5 seconds.")
+	DR:ChatBroadcast("下一张地图将会是 "..win.."。 将在5s后启动换图。")
 
 	local nextmap = win
 
 	timer.Simple(5, function()
-		DR:ChatBroadcast("Changing to the next map...")
+		DR:ChatBroadcast("正在更换地图...")
 		RunConsoleCommand("changelevel", nextmap)
 	end)
 
@@ -224,7 +224,7 @@ concommand.Add("mapvote_vote", function(ply, cmd, args)
 			MV:UpdateMapVote()
 		else
 			if IsValid(ply) then
-				ply:DeathrunChatPrint("Please specify a map.")
+				ply:DeathrunChatPrint("请选择一个地图。")
 			end
 		end
 	end
@@ -239,14 +239,9 @@ concommand.Add("mapvote_nominate_map", function(ply, cmd, args)
 			--print(nom, game.GetMap())
 
 			if not ply.LastNom or ply.LastNom + 1 < CurTime() then
-					
-				if not table.HasValue( MV:GetGoodMaps(), nom ) then
-					ply:DeathrunChatPrint("You can't nominate a map that isn't in the nominate list.")
-					return
-				end
 
 				if nom == game.GetMap() then
-					ply:DeathrunChatPrint("You can't nominate the map you are currently playing.")
+					ply:DeathrunChatPrint("您不能指定当前正在游玩的地图。")
 					return
 				end
 
@@ -261,14 +256,14 @@ concommand.Add("mapvote_nominate_map", function(ply, cmd, args)
         
 				ply.LastNom = CurTime()
 
-				DR:ChatBroadcast(ply:Nick().." has nominated "..nom.." for the mapvote!")
+				DR:ChatBroadcast(ply:Nick().." 指定了 "..nom.." 来进行投票。")
 
 				net.Start("MapvoteSyncNominations")
 				net.WriteTable( MV.Nominations )
 				net.Broadcast()
 
 			else
-				ply:DeathrunChatPrint("Please wait before nominating again.")
+				ply:DeathrunChatPrint("歇会再指定地图吧！233")
 			end
 		end
 	end
@@ -291,12 +286,6 @@ function MV:CheckRTV( suppress )
 
 	if MV.Active then return end
 
-	if not suppress then
-		if MV.LoadTime + 60 > CurTime() then
-			DR:ChatBroadcast("It is too early to call an RTV.")
-			return
-		end
-	end
 
 	local votes = 0
 	local numplayers = #player.GetAll()
@@ -308,18 +297,17 @@ function MV:CheckRTV( suppress )
 		end
 	end
 
-	local ratio = votes/numplayers
-	if ratio > RTVRatio:GetFloat() then
+	-- local ratio = votes/numplayers
+	local needed = math.floor(RTVRatio:GetFloat() * numplayers) - votes + 1
+	if needed == 0 then
 		if not hook.Call("DeathrunStartMapvote", nil, ROUND:GetRoundsPlayed()) then
 			MV:BeginMapVote()
 		end
-		DR:ChatBroadcast("RTV limit reached. Initiating mapvote.")
+		DR:ChatBroadcast("开始投票。")
 	else
-
-		local needed = math.ceil(RTVRatio:GetFloat() * numplayers) - votes + 1
-		if not suppress then
-			DR:ChatBroadcast(tostring(needed).." more votes needed in order to change the map. Type !rtv to vote.")
-		end
+		-- if not suppress then
+		DR:ChatBroadcast("投票换图进度：" .. tostring(votes) .. "/" .. tostring(votes + needed) .. "。输入!rtv进行投票。")
+		-- end
 	end
 
 end
@@ -327,6 +315,11 @@ end
 concommand.Add( "mapvote_rtv", function( ply, cmd, args )
 
 	if DR:CanAccessCommand(ply, cmd) then
+
+		if MV.LoadTime + 30 > CurTime() then
+			DR:ChatBroadcast("现在投票换图为时尚早。")
+			return
+		end
 
 		local suppress = ply.WantsRTV
 

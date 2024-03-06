@@ -1,0 +1,7 @@
+"Gamemode"
+{
+	"base"		"base"
+	"title"		"Deathrun 死亡跑酷"
+      "category"	      "fun"
+	"maps"		"^deathrun"
+}

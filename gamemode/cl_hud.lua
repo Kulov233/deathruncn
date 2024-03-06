@@ -115,10 +115,10 @@ DR:AddCustomHUD( 3, function(x,y) DR:DrawPlayerHUDClassic( x, y ) end, function(
 
 
 local RoundNames = {}
-RoundNames[ROUND_WAITING] = "Waiting for players"
-RoundNames[ROUND_PREP] = "Preparing"
-RoundNames[ROUND_ACTIVE] = "Time Left"
-RoundNames[ROUND_OVER] = "Round Over"
+RoundNames[ROUND_WAITING] = "正在等待玩家..."
+RoundNames[ROUND_PREP] = "准备..."
+RoundNames[ROUND_ACTIVE] = "剩余时间..."
+RoundNames[ROUND_OVER] = "回合结束..."
 
 local RoundEndData = {
 	Active = false,
@@ -364,7 +364,7 @@ function DR:DrawPlayerHUD( x, y )
 	surface.SetDrawColor( clouds ) -- Time Left
 	surface.DrawRect(dx,dy,228,16)
 
-	deathrunShadowTextSimple( string.upper( RoundNames[ ROUND:GetCurrent() ]  or "TIME LEFT" ), "deathrun_hud_Small", dx+4,  dy + 16/2, otcol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+	deathrunShadowTextSimple( string.upper( RoundNames[ ROUND:GetCurrent() ]  or "剩余时间..." ), "deathrun_hud_Small", dx+4,  dy + 16/2, otcol, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	deathrunShadowTextSimple( string.ToMinutesSeconds( math.Clamp( ROUND:GetTimer(), 0, 99999 ) ), "deathrun_hud_Small", dx + 228-4,  dy + 16/2, otcol, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 
 	dy = dy + 16 + 4
@@ -405,8 +405,8 @@ function DR:DrawPlayerHUD( x, y )
 	surface.SetDrawColor( 255,255,255,(alpha/255)*50 )
 	surface.DrawRect( dx + 32 + 4, dy, 192, 32 )
 
-	local maxvel = 1000 -- yeah fuck yall
-	local curvel = math.Round( math.Clamp( ply:GetVelocity():Length2D(), 0, maxvel ) )
+	local maxvel = 1500 -- yeah fuck yall
+	local curvel = math.Round( math.Clamp( ply:GetVelocity():Length2D(), 0, 10000 ) )
 	
 	local velfrac = InverseLerp( curvel, 0, maxvel )
 
@@ -664,17 +664,17 @@ function DR:DrawWinners( winteam, tbl_mvps, x, y, stalemate )
 		end
 	end
 
-	deathrunShadowTextSimple( stalemate == false and string.upper(team.GetName( winteam ).." win the round!") or "STALEMATE!", "deathrun_hud_Xlarge", x + w/2, y + h/2, DR.Colors.Text.Clouds, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1 )
+	deathrunShadowTextSimple( stalemate == false and string.upper(team.GetName( winteam ).." 取得了胜利。") or "平局。", "deathrun_hud_Xlarge", x + w/2, y + h/2, DR.Colors.Text.Clouds, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1 )
 	surface.SetDrawColor( DR.Colors.Clouds )
 	surface.DrawRect(x, y + h + gap, mw, mh)
-	deathrunShadowTextSimple( stalemate and "YOU'RE ALL TERRIBLE!" or "MOST VALUABLE PLAYERS", "deathrun_hud_Medium", x + w/2, y + h + gap +mh/2 - 1, col, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 0 )
+	deathrunShadowTextSimple( stalemate and "什么鬼..." or "MVP", "deathrun_hud_Medium", x + w/2, y + h + gap +mh/2 - 1, col, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 0 )
 end
 
 function GM:HUDWeaponPickedUp( wep )
-	DR:AddKillNote( "+ "..(wep.PrintName or "Weapon"), 2 )
+	DR:AddKillNote( "+ "..(wep.PrintName or "武器"), 2 )
 end
 function GM:HUDAmmoPickedUp( name, amt )
-	DR:AddKillNote( "+ "..(amt or 0).." "..(name or "Ammo"), 2 )
+	DR:AddKillNote( "+ "..(amt or 0).." "..(name or "弹药"), 2 )
 end
 
 -- sass hud
@@ -926,7 +926,7 @@ function GetWeaponHUDData( ply )
 	if IsValid( wep ) then
 		weptable = wep:GetTable()
 
-		data.Name = wep:GetPrintName() or "Weapon"
+		data.Name = wep:GetPrintName() or "武器"
 		data.Clip1 = wep:Clip1() or -1
 		data.Clip2 = wep:Clip2() or -1
 		data.Clip1Max = 1

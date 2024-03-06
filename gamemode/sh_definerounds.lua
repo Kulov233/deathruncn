@@ -16,7 +16,7 @@ RoundDuration = CreateConVar("deathrun_round_duration", 60*5, defaultFlags, "How
 PrepDuration = CreateConVar("deathrun_preptime_duration", 5, defaultFlags, "How many seconds preptime should go for.")
 FinishDuration = CreateConVar("deathrun_finishtime_duration", 10, defaultFlags, "How many seconds to wait before starting a new round.")
 DeathRatio = CreateConVar("deathrun_death_ratio", 0.15, defaultFlags, "What fraction of players are Deaths.")
-RoundLimit = CreateConVar("deathrun_round_limit", 6, defaultFlags, "How many rounds to play before changing the map.")
+RoundLimit = CreateConVar("deathrun_round_limit", 8, defaultFlags, "How many rounds to play before changing the map.")
 DeathAvoidPunishment = CreateConVar("deathrun_death_avoid_punishment", 1, defaultFlags, "How many round should a player sit out after they attempt to death avoid?")
 DeathMax = CreateConVar("deathrun_max_deaths", 64, defaultFlags, "Maximum amount of players on the Death team at any given time.")
 
@@ -79,7 +79,7 @@ local function checkdeathavoid( ply )
 	local avoided = (ply:Team() == TEAM_DEATH and ply:Alive()) and true or false
 	if avoided == true and (ROUND:GetCurrent() == ROUND_PREP or ROUND:GetCurrent() == ROUND_ACTIVE) and #player.GetAllPlaying() > 2 then
 		DR:PunishDeathAvoid( ply, GetConVarNumber("deathrun_death_avoid_punishment") )
-		DR:ChatBroadcast("Player "..ply:Nick().." will be punished for attempting to avoid being on the Death team!")
+		DR:ChatBroadcast("玩家 "..ply:Nick().." 将会受到死神逃避惩罚。")
 	end
 end
 hook.Add("PlayerDisconnected", "DeathrunWatchDeathAvoid", checkdeathavoid)
@@ -89,7 +89,7 @@ hook.Add("PlayerInitialSpawn", "DeathrunCleanupSinglePlayer", function( ply )
 	ROUND:SyncTimerPlayer( ply )
 	if #player.GetAll() <= 1 then
 		game.CleanUpMap()
-		DR:ChatBroadcast("Cleaned up the map.")
+		DR:ChatBroadcast("地图已被重置。")
 	end
 end)
 ROUND:AddState( ROUND_WAITING,
@@ -214,7 +214,7 @@ ROUND:AddState( ROUND_PREP,
 					
 					DR:PardonDeathAvoid( ply, 1 )
 
-					DR:ChatBroadcast( "Player "..ply:Nick().." is being punished for death avoidance! They have "..tostring(DR:GetDeathAvoid( ply )).." Death rounds remaining." )
+					DR:ChatBroadcast( "玩家 "..ply:Nick().." 正在接受死神躲避惩罚。他还需要扮演 "..tostring(DR:GetDeathAvoid( ply )).." 局死神。" )
 
 					table.insert( deaths, punishmentpool[#punishmentpool] ) -- add players to the deaths if they are being punishd for death avoid
 					table.RemoveByValue( pool, punishmentpool[#punishmentpool] )
@@ -346,11 +346,11 @@ ROUND:AddState( ROUND_ACTIVE,
 				end
 			end
 
-			if (#deaths == 0 and #runners == 0) or ROUND:GetTimer() == 0 then
+			if (#deaths == 0 and #runners == 0) then
 				ROUND:FinishRound( WIN_STALEMATE )
 			elseif #deaths == 0 then
 				ROUND:FinishRound( WIN_RUNNER )
-			elseif #runners == 0 then
+			elseif #runners == 0 or ROUND:GetTimer() == 0 then
 				ROUND:FinishRound( WIN_DEATH )
 			end
 
@@ -367,7 +367,7 @@ ROUND:AddState( ROUND_OVER,
 		rounds_played = rounds_played + 1
 		if SERVER then
 			if not hook.Call("DeathrunShouldMapSwitch", nil, rounds_played) and ( rounds_played < GetConVarNumber("deathrun_round_limit") ) then
-				DR:ChatBroadcast("Round "..tostring(rounds_played).." over. "..tostring(GetConVarNumber("deathrun_round_limit") - rounds_played).." rounds to go!")
+				DR:ChatBroadcast("第 "..tostring(rounds_played).." 回合结束。剩余 "..tostring(GetConVarNumber("deathrun_round_limit") - rounds_played).." 回合。")
 				ROUND:SetTimer(GetConVarNumber("deathrun_finishtime_duration") )
 				timer.Simple(GetConVarNumber("deathrun_finishtime_duration") , function()
 					ROUND:RoundSwitch( ROUND_PREP )
@@ -409,7 +409,7 @@ if SERVER then
 
 	function ROUND:FinishRound( winteam )
 		ROUND:RoundSwitch( ROUND_OVER )
-		DR:ChatBroadcast("Round over! "..( winteam == WIN_RUNNER and team.GetName( TEAM_RUNNER ).." win!" or winteam == WIN_DEATH and team.GetName( TEAM_DEATH ).." win!" or "Stalemate! Unbelievable!" ) )
+		DR:ChatBroadcast("回合结束。 "..( winteam == WIN_RUNNER and team.GetName( TEAM_RUNNER ).." 胜利。" or winteam == WIN_DEATH and team.GetName( TEAM_DEATH ).." 胜利。" or "平局。" ) )
 		--calculate MVPs
 		net.Start("DeathrunSendMVPs")
 
@@ -423,7 +423,7 @@ if SERVER then
 		for k,v in ipairs( players ) do
 			if v:Team() == winteam then
 				if v:Alive() then
-					table.insert(mvps,v:Nick().." survived the round!")
+					table.insert(mvps,v:Nick().." 在本回合中存活。")
 				end
 				if v.KillsThisRound > mostkills then
 					mostkills = v.KillsThisRound
@@ -433,7 +433,7 @@ if SERVER then
 		end
 
 		if mostkillsmvp and winteam == TEAM_RUNNER then
-			table.insert(mvps, mostkillsmvp:Nick().." got ".. (mostkills) ..(mostkills > 1 and " kills!" or " kill!") )
+			table.insert(mvps, mostkillsmvp:Nick().." 击杀了 ".. (mostkills) ..(mostkills > 1 and " 名玩家。" or " 名玩家。") )
 		end
 
 		local data = {}

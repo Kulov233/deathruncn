@@ -11,7 +11,7 @@ function PLAYER:BeginSpectate()
 	if avoided == true and (ROUND:GetCurrent() == ROUND_PREP or ROUND:GetCurrent() == ROUND_ACTIVE) and (#player.GetAllPlaying()) > 1 then
 		print("Punish death avoider..")
 		DR:PunishDeathAvoid( self, DR.DeathAvoidPunishment:GetInt() )
-		DR:ChatBroadcast("Player "..self:Nick().." will be punished for attempting to avoid being on the Death team!")
+		DR:ChatBroadcast("玩家 "..self:Nick().." 将会因躲避死神而受到惩罚！")
 	end
 
 	--self:StripWeapons()

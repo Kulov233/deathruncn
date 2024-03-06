@@ -22,19 +22,19 @@ end
 local msgs = {}
 
 msgs = {
-	"Don't hesitate to ask the staff any questions, they are here to help.",
-	"Type !rtv to force a mapchange.",
-	"Type !crosshair to customize your crosshair settings and achieve different designs.",
-	"Type !help or press F1 for help and information about the gamemode.",
-	"Change the position of the HUD by pressing F2 or typing !settings.",
-	"Change how long player names stay on the screen by pressing F2 or typing !settings.",
-	"Buttons are claimed automatically. Just walk up to them!",
-	"Did you know the weapons have recoil patterns? Pull down gently to concentrate your spray!",
-	"Too many squeakers? Mute players from the scoreboard by holding TAB.",
-	"Disable these messages through the !settings menu or by pressing F2.",
-	"Enable Thirdperson, disable Autojump, change HUD position and more by pressing F2.",
-	"Change your HUD theme in the F2 menu.",
-	"Disconnecting while on the Death team is not allowed and will be considered death avoidance. You will be forced to play 1 extra rounds as Death.",
+	"如果有问题可以直接在聊天框中打出或善用搜索引擎。我们希望您有一个不错的体验。",
+	"使用!rtv来投票换图，使用!nominate或!maps来指定地图（会在下次换图时以选项形式出现）。",
+	"使用!crosshair来自定义准星。",
+	"按F4打开商店，所有物品均可免费获得。",
+	"使用F2或!settings来修改HUD位置等项目。",
+	"使用F2或!settings来修改队友名字消失时间等项目。",
+	"走近按钮可以占有该按钮。",
+	"可以使用Tab并右键玩家以静音该玩家。",
+	"可以使用F2来关闭这些[Help]开头的提示。",
+	"使用F2可以自定义HUD并关闭自动连跳、调节队伍至观察者等。实用命令：!stuck - 可以在被卡住时使用；!spec - 切换到观察者队伍。实用快捷键：F2 - 设置；F8 - 切换人称。",
+	"使用F2可以更改HUD主题。",
+	"在作为死神时退出会受到惩罚，并会在下一回合中继续扮演死神。",
+	"死亡后可以使用!ghost进入幽灵模式，再次使用以退出。在幽灵模式下，按左键存点，按右键回到存点，按V进入飞行模式。",
 }
 
 function DR:AddAnnouncement( ann )

@@ -72,7 +72,7 @@ function MV:OpenFullMapList( maps )
 	frame:SetSize(480, math.min(ScrH()-64, (480*1.618 - 44) ) ) -- GOLDEN RATIO FIBONACCI SPIRAL OMG
 	frame:Center()
 	frame:MakePopup()
-	frame:SetTitle("Map List")
+	frame:SetTitle("地图列表")
 
 	local panel = vgui.Create("DPanel", frame)
 	panel:SetPos(4,32)
@@ -122,14 +122,14 @@ function MV:RepopulateMapList()
 
 		local lb = dlist:Add( "DLabel" )
 		lb:SetFont( "deathrun_derma_Medium" )
-		lb:SetText("Maps")
+		lb:SetText("Maps 地图列表")
 		lb:SetColor( DR.Colors.Turq )
 		lb:SizeToContents()
 		lb:SetWide( dlist:GetWide() )
 
 		local lb = dlist:Add( "DLabel" )
 		lb:SetFont( "deathrun_derma_Tiny" )
-		lb:SetText("Click on a map to see its options!")
+		lb:SetText("点击一个地图以查看更多选项。")
 		lb:SetColor( DR.Colors.Turq )
 		lb:SizeToContents()
 		lb:SetWide( dlist:GetWide() )
@@ -143,12 +143,12 @@ function MV:RepopulateMapList()
 		--dlist:Add( MV:NewDermaRow({"Click on a map to see options!"}, dlist:GetParent():GetParent():GetWide()-4, 24 ) )
 		for i = 1,#maps do
 			if maps[i] ~= game.GetMap() then
-				local mapderma = MV:NewDermaRow({maps[i] or "Error.", MV:IsMapNominated( maps[i] ) and "[NOMINATED]" or "" }, dlist:GetParent():GetParent():GetWide()-8, 24, DR.Colors.Clouds, MV:IsMapNominated( maps[i] ) and DR.Colors.Turq or HexColor("#303030"),
+				local mapderma = MV:NewDermaRow({maps[i] or "Error.", MV:IsMapNominated( maps[i] ) and "[NOMINATED 已被指定]" or "" }, dlist:GetParent():GetParent():GetWide()-8, 24, DR.Colors.Clouds, MV:IsMapNominated( maps[i] ) and DR.Colors.Turq or HexColor("#303030"),
 					function( self )
 						local map = self:GetParent().mapname
 
 						local menu = vgui.Create("DMenu")
-						local nominate = menu:AddOption("Nominate Map")
+						local nominate = menu:AddOption("Nominate指定该地图")
 						nominate:SetIcon("icon16/lightbulb.png")
 						nominate.mapname = map
 						function nominate:DoClick()
@@ -183,7 +183,7 @@ function MV:OpenVotingPanel()
 	frame:SetPos(4,0)
 	frame:CenterVertical()
 	--frame:MakePopup()
-	frame:SetTitle("Mapvote")
+	frame:SetTitle("地图投票...")
 
 	MV.VotingPanelDerma = frame
 
@@ -259,7 +259,7 @@ timer.Create("MapvoteCountdownTimer", 0.2, 0, function()
 		MV.TimeLeft = MV.TimeLeft - 0.2
 		if IsValid(MV.VotingPanelDerma) then
 			
-			MV.VotingPanelDerma:SetTitle( "Mapvote - "..string.ToMinutesSeconds(MV.TimeLeft > 0 and MV.TimeLeft or 0) )
+			MV.VotingPanelDerma:SetTitle( "地图投票 - "..string.ToMinutesSeconds(MV.TimeLeft > 0 and MV.TimeLeft or 0) )
 
 			if MV.TimeLeft <= 0 then
 				timer.Simple(4, function()

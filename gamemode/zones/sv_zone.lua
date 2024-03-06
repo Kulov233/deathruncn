@@ -87,7 +87,7 @@ local skip = 0
 local tickrate = math.ceil( 1/engine.TickInterval() ) -- makes it a bit less taxing, at the cost of reducing the resolution of records
 
 if tickrate >= 100 then
-	skip = 2
+	skip = 1
 elseif tickrate >= 66 then
 	skip = 1
 end
@@ -154,10 +154,10 @@ concommand.Add("zone_create", function(ply, cmd, args) -- e.g. zone_create endma
 	if DR:CanAccessCommand(ply, cmd) and #args == 2 then
 		if ZONE:Create(args[1], Vector(0,0,0), Vector(0,0,0), Color(255,255,255), args[2], ply.LastZoneDenied == args[1]) then
 			ZONE:BroadcastZones()
-			DR:SafeChatPrint( ply, "Created zone '"..args[1].."' of type '"..args[2].."'")
+			DR:SafeChatPrint( ply, "创建了 '"..args[1].."' 区域，类型 '"..args[2].."'。")
 			ply.LastZoneDenied = nil
 		else
-			DR:SafeChatPrint( ply, "There already exists a zone named '"..args[1].."'. Please delete it first!\nIf you wish to overwrite it run this command again")
+			DR:SafeChatPrint( ply, "已经有一个名为 '"..args[1].."' 的区域了。")
 			ply.LastZoneDenied = args[1]
 		end
 	end
@@ -171,7 +171,7 @@ concommand.Add("zone_remove", function(ply, cmd, args) -- e.g. zone_create endma
 		ZONE.zones[args[1]] = nil
 		ZONE:Save() 
 		ZONE:BroadcastZones()
-		DR:SafeChatPrint( ply, "Deleted zone '"..args[1].."'")
+		DR:SafeChatPrint( ply, "删除了区域 '"..args[1].."'。")
 	end
 end)
 DR:AddChatCommand("removezone", function(ply, args)
@@ -185,12 +185,12 @@ concommand.Add("zone_setpos1", function(ply, cmd, args)
 				ZONE.zones[args[1]].pos1 = ply:GetEyeTrace().HitPos
 				ZONE:BroadcastZones()
 				ZONE:Save()
-				DR:SafeChatPrint( ply, args[1]..".pos1 set to "..tostring( ZONE.zones[args[1]].pos1) )
+				DR:SafeChatPrint( ply, args[1].." Pos1 -> "..tostring( ZONE.zones[args[1]].pos1) )
 			else
-				DR:SafeChatPrint( ply, "Zone does not exist.")
+				DR:SafeChatPrint( ply, "该区域不存在。")
 			end
 		else
-			DR:SafeChatPrint( ply, "Please use eyetrace.")
+			DR:SafeChatPrint( ply, "请使用眼部追踪。")
 		end
 	end
 end)
@@ -207,12 +207,12 @@ concommand.Add("zone_setpos2", function(ply, cmd, args)
 				ZONE.zones[args[1]].pos2 = ply:GetEyeTrace().HitPos
 				ZONE:BroadcastZones()
 				ZONE:Save()
-				DR:SafeChatPrint( ply, args[1]..".pos2 set to "..tostring( ZONE.zones[args[1]].pos2) )
+				DR:SafeChatPrint( ply, args[1].." Pos2 -> "..tostring( ZONE.zones[args[1]].pos2) )
 			else
-				DR:SafeChatPrint( ply, "Zone does not exist.")
+				DR:SafeChatPrint( ply, "该区域不存在。")
 			end
 		else
-			DR:SafeChatPrint( ply, "Please use eyetrace.")
+			DR:SafeChatPrint( ply, "请使用眼部追踪。")
 		end
 	end
 end)
@@ -226,9 +226,9 @@ concommand.Add("zone_setcolor", function(ply, cmd, args) -- RGBA e.g. zone_setco
 			ZONE.zones[args[1]].color = Color( tonumber(args[2]) or 255, tonumber(args[3]) or 255, tonumber(args[4]) or 255, tonumber(args[5]) or 255 )
 			ZONE:BroadcastZones()
 			ZONE:Save()
-			DR:SafeChatPrint( ply, args[1]..".color set to "..tostring( ZONE.zones[args[1]].color) )
+			DR:SafeChatPrint( ply, args[1].." 颜色设置为 "..tostring( ZONE.zones[args[1]].color).."。" )
 		else
-			DR:SafeChatPrint( ply, "Zone does not exist.")
+			DR:SafeChatPrint( ply, "该区域不存在。")
 		end
 	end
 end)
@@ -243,9 +243,9 @@ concommand.Add("zone_settype", function(ply, cmd, args) -- e.g. zone_settype end
 			ZONE.zones[args[1]].type = args[2]
 			ZONE:BroadcastZones()
 			ZONE:Save()
-			DR:SafeChatPrint( ply, args[1]..".type set to "..tostring( ZONE.zones[args[1]].type) )
+			DR:SafeChatPrint( ply, args[1].." 类型被设置为 "..tostring( ZONE.zones[args[1]].type) )
 		else
-			DR:SafeChatPrint( ply, "Zone does not exist.")
+			DR:SafeChatPrint( ply, "该区域不存在。")
 		end
 	end
 end)
@@ -330,18 +330,19 @@ hook.Add("DeathrunPlayerEnteredZone", "DeathrunPlayerFinishMap", function(ply, n
 		else
 			placetext = placestring.."th"
 		end
-		
-		local finishtime = CurTime() - ZONE.StartTime
-			
-		DR:ChatBroadcast(ply:Nick().." has finished the map in "..placetext.." place with a time of "..string.ToMinutesSecondsMilliseconds(finishtime).."!")
-		ply.HasFinishedMap = true
 
-		if place == 1 then
-			for k,v in ipairs(team.GetPlayers( TEAM_DEATH )) do
-				v:SetRunSpeed( v:GetWalkSpeed() ) -- deaths lose sprint when the runner finishes
-			end
+		
+		for k,v in ipairs( team.GetPlayers( TEAM_DEATH ) ) do
+			v:SetRunSpeed( 300 )
 		end
 
-		hook.Call("DeathrunPlayerFinishMap", nil, ply, name, z, place, finishtime)
+		DR:ChatBroadcast(ply:Nick().." 到达了终点， 用时 "..string.ToMinutesSecondsMilliseconds(CurTime() - ZONE.StartTime).." ，位次为 "..placetext.." 。")
+		ply.HasFinishedMap = true
+
+		for k,v in ipairs(team.GetPlayers( TEAM_DEATH )) do
+			v:SetRunSpeed( v:GetWalkSpeed() ) -- deaths lose sprint when the runner finishes
+		end
+
+		hook.Call("DeathrunPlayerFinishMap", nil, ply, name, z, place, CurTime() - ZONE.StartTime)
 	end
 end)

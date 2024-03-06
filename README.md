@@ -13,9 +13,9 @@
 * 在您的**server.cfg**文件中，加入这行代码（若已有以gamemode开头的行则将其修改为）：
 ```gamemode deathrun```
 * 如果您更喜欢在服务器的启动参数中指定游戏模式，请将以下的参数添加到服务器的启动参数：
-```+gamemode deathrun```
-* 这样就完成了安装。  
+```+gamemode deathrun``` 
   
+这样就完成了安装。   
 一些额外的功能与数据：  
 * 如果您想启用幽灵（Ghost）功能，请将**useful_stuff/ghost**文件夹复制到**garrysmod/addons**目录。注意，本插件来自这个仓库：[gmod-deathrun-ghost](https://github.com/ceifa/gmod-deathrun-ghost)。
 * **useful_stuff/zones**文件夹中记录了很多死亡跑酷地图的区域数据（主要是地图的起点与终点区域）。如果您想快速导入这些数据，请将本文件夹复制到**garrysmod/data/deathrun**文件夹中。
